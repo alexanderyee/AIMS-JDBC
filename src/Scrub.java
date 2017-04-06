@@ -48,6 +48,7 @@ public class Scrub {
 
 	public static void main(String[] args) {
 		for (String filename : args) {
+		
 			try {
 				br = new BufferedReader(new FileReader(new File(filename)));
 				bwCSV = new BufferedWriter(
@@ -55,11 +56,16 @@ public class Scrub {
 				sqlTableName = "alexanderyee.aims" + filename.substring(filename.length() - 8, filename.length() - 4);
 				bwSQL = new BufferedWriter(new FileWriter(new File(sqlTableName.substring(sqlTableName.indexOf('.') + 1) + ".sql"))); // aims[year].sql 
 				/* INITIALIZE SQL FILE */
+				// due to previous tests on the files, figured out the max lengths the strings: 
+				// 7 for state
+				// 31 for county
+				// 80 for lea_name
+				// 74 for school
 				bwSQL.write("set autocommit off;\nset define off;\nDROP TABLE " + sqlTableName + " PURGE;\n"
 						+ "CREATE TABLE " + sqlTableName + " (\n" + "year	integer,\n" + "state	varchar2(7),\n"
-						+ "county 	varchar2(69),\n" + "LEA_ID	integer,\n" + "LEA_CTDS	integer,\n"
-						+ "LEA_name	varchar2(169),\n" + "school_id	integer,\n" + "school_CTDS	integer,\n"
-						+ "school_name	varchar2(169),\n" + "is_charter	char(1),\n" + "math_mean 	integer,\n"
+						+ "county 	varchar2(31),\n" + "LEA_ID	integer,\n" + "LEA_CTDS	integer,\n"
+						+ "LEA_name	varchar2(80),\n" + "school_id	integer,\n" + "school_CTDS	integer,\n"
+						+ "school_name	varchar2(74),\n" + "is_charter	char(1),\n" + "math_mean 	integer,\n"
 						+ "math_pctFFB	integer,\n" + "math_pctA	integer,\n" + "math_pctM	integer,\n"
 						+ "math_pctE	integer,\n" + "math_pctP	integer,\n" + "read_mean	integer,\n"
 						+ "read_pctFFB	integer,\n" + "read_pctA	integer,\n" + "read_pctM	integer,\n"
@@ -123,6 +129,7 @@ public class Scrub {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		
 		}
 	}
 

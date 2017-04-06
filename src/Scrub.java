@@ -53,7 +53,7 @@ public class Scrub {
 				bwCSV = new BufferedWriter(
 						new FileWriter(new File(filename.substring(0, filename.length() - 4) + "_Scrubbed.csv")));
 				sqlTableName = "alexanderyee.aims" + filename.substring(filename.length() - 8, filename.length() - 4);
-				bwSQL = new BufferedWriter(new FileWriter(new File(sqlTableName + ".sql"))); // aims[year].sql NEED TO REMOVE THE FIRST PERIOD
+				bwSQL = new BufferedWriter(new FileWriter(new File(sqlTableName.substring(sqlTableName.indexOf('.') + 1) + ".sql"))); // aims[year].sql 
 				/* INITIALIZE SQL FILE */
 				bwSQL.write("set autocommit off;\nset define off;\nDROP TABLE " + sqlTableName + " PURGE;\n"
 						+ "CREATE TABLE " + sqlTableName + " (\n" + "year	integer,\n" + "state	varchar2(7),\n"

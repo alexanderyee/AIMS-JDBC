@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /*+----------------------------------------------------------------------
 ||
-||  Class [Class Name] 
+||  Class Scrub
 ||
 ||         Author:  Alexander Yee
 ||
@@ -20,7 +20,8 @@ import java.util.ArrayList;
 ||					*I'm leaving the asterisks to represent them as null values when I insert them in SQL
 ||					After scrubbing, it writes the data to a new file: [filename]_Scrubbed.csv
 ||					Then it creates a .sql file that is ready to execute to create a table of the data: aims[year].sql
-||
+||					
+||					
 ||  Inherits From:  None
 ||
 ||     Interfaces:  None
@@ -31,13 +32,14 @@ import java.util.ArrayList;
 ||
 |+-----------------------------------------------------------------------
 ||
-||   Constructors:  Why
+||   Constructors:  none
 ||
-||  Class Methods:  null
+||  Class Methods:  commaSplit
 ||
 ||  Inst. Methods:  nada
 ||
 ++-----------------------------------------------------------------------*/
+
 public class Scrub {
 	private static BufferedReader br;
 	private static BufferedWriter bwCSV;
@@ -50,8 +52,8 @@ public class Scrub {
 				br = new BufferedReader(new FileReader(new File(filename)));
 				bwCSV = new BufferedWriter(
 						new FileWriter(new File(filename.substring(0, filename.length() - 4) + "_Scrubbed.csv")));
-				sqlTableName = "aims" + filename.substring(filename.length() - 8, filename.length() - 4);
-				bwSQL = new BufferedWriter(new FileWriter(new File(sqlTableName + ".sql"))); // aims[year].sql
+				sqlTableName = "alexanderyee.aims" + filename.substring(filename.length() - 8, filename.length() - 4);
+				bwSQL = new BufferedWriter(new FileWriter(new File(sqlTableName + ".sql"))); // aims[year].sql NEED TO REMOVE THE FIRST PERIOD
 				/* INITIALIZE SQL FILE */
 				bwSQL.write("set autocommit off;\nset define off;\nDROP TABLE " + sqlTableName + " PURGE;\n"
 						+ "CREATE TABLE " + sqlTableName + " (\n" + "year	integer,\n" + "state	varchar2(7),\n"
@@ -115,6 +117,7 @@ public class Scrub {
 
 			}
 			try {
+				bwSQL.write("GRANT SELECT ON " + sqlTableName + " TO public;\n");
 				bwCSV.close();
 				bwSQL.close();
 			} catch (IOException e) {
